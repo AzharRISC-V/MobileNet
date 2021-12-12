@@ -5,7 +5,7 @@ import numpy as np
 ############################################################################################################
 # Convolution layer Methods
 def __conv2d_p(name, x, w=None, num_filters=16, kernel_size=(3, 3), padding='SAME', stride=(1, 1),
-               initializer=tf.contrib.layers.xavier_initializer(), l2_strength=0.0, bias=0.0):
+               initializer=tf.compat.v1.keras.initializers.glorot_normal(), l2_strength=0.0, bias=0.0):
     """
     Convolution 2D Wrapper
     :param name: (string) The name scope provided by the upper tf.name_scope('name') as scope.
@@ -40,7 +40,7 @@ def __conv2d_p(name, x, w=None, num_filters=16, kernel_size=(3, 3), padding='SAM
 
 
 def conv2d(name, x, w=None, num_filters=16, kernel_size=(3, 3), padding='SAME', stride=(1, 1),
-           initializer=tf.contrib.layers.xavier_initializer(), l2_strength=0.0, bias=0.0,
+           initializer=tf.compat.v1.keras.initializers.glorot_normal(), l2_strength=0.0, bias=0.0,
            activation=None, batchnorm_enabled=False, max_pool_enabled=False, dropout_keep_prob=-1,
            is_training=True):
     """
@@ -98,7 +98,7 @@ def conv2d(name, x, w=None, num_filters=16, kernel_size=(3, 3), padding='SAME', 
 
 
 def __depthwise_conv2d_p(name, x, w=None, kernel_size=(3, 3), padding='SAME', stride=(1, 1),
-                         initializer=tf.contrib.layers.xavier_initializer(), l2_strength=0.0, bias=0.0):
+                         initializer=tf.compat.v1.keras.initializers.glorot_normal(), l2_strength=0.0, bias=0.0):
     with tf.variable_scope(name):
         stride = [1, stride[0], stride[1], 1]
         kernel_shape = [kernel_size[0], kernel_size[1], x.shape[-1], 1]
@@ -119,7 +119,7 @@ def __depthwise_conv2d_p(name, x, w=None, kernel_size=(3, 3), padding='SAME', st
 
 
 def depthwise_conv2d(name, x, w=None, kernel_size=(3, 3), padding='SAME', stride=(1, 1),
-                     initializer=tf.contrib.layers.xavier_initializer(), l2_strength=0.0, bias=0.0, activation=None,
+                     initializer=tf.compat.v1.keras.initializers.glorot_normal(), l2_strength=0.0, bias=0.0, activation=None,
                      batchnorm_enabled=False, is_training=True):
     """Implementation of depthwise 2D convolution wrapper"""
     with tf.variable_scope(name) as scope:
@@ -143,7 +143,7 @@ def depthwise_conv2d(name, x, w=None, kernel_size=(3, 3), padding='SAME', stride
 def depthwise_separable_conv2d(name, x, w_depthwise=None, w_pointwise=None, width_multiplier=1.0, num_filters=16,
                                kernel_size=(3, 3),
                                padding='SAME', stride=(1, 1),
-                               initializer=tf.contrib.layers.xavier_initializer(), l2_strength=0.0, biases=(0.0, 0.0),
+                               initializer=tf.compat.v1.keras.initializers.glorot_normal(), l2_strength=0.0, biases=(0.0, 0.0),
                                activation=None, batchnorm_enabled=True,
                                is_training=True):
     """Implementation of depthwise separable 2D convolution operator as in MobileNet paper"""
@@ -165,7 +165,7 @@ def depthwise_separable_conv2d(name, x, w_depthwise=None, w_pointwise=None, widt
 ############################################################################################################
 # Fully Connected layer Methods
 
-def __dense_p(name, x, w=None, output_dim=128, initializer=tf.contrib.layers.xavier_initializer(), l2_strength=0.0,
+def __dense_p(name, x, w=None, output_dim=128, initializer=tf.compat.v1.keras.initializers.glorot_normal(), l2_strength=0.0,
               bias=0.0):
     """
     Fully connected layer
@@ -189,7 +189,7 @@ def __dense_p(name, x, w=None, output_dim=128, initializer=tf.contrib.layers.xav
         return output
 
 
-def dense(name, x, w=None, output_dim=128, initializer=tf.contrib.layers.xavier_initializer(), l2_strength=0.0,
+def dense(name, x, w=None, output_dim=128, initializer=tf.compat.v1.keras.initializers.glorot_normal(), l2_strength=0.0,
           bias=0.0,
           activation=None, batchnorm_enabled=False, dropout_keep_prob=-1,
           is_training=True
