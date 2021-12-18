@@ -18,12 +18,12 @@ def main():
     _, config_args.summary_dir, config_args.checkpoint_dir = create_experiment_dirs(config_args.experiment_dir)
 
     # Reset the default Tensorflow graph
-    tf.reset_default_graph()
+    tf.compat.v1.reset_default_graph()
 
     # Tensorflow specific configuration
-    config = tf.ConfigProto(allow_soft_placement=True)
+    config = tf.compat.v1.ConfigProto(allow_soft_placement=True)
     config.gpu_options.allow_growth = True
-    sess = tf.Session(config=config)
+    sess = tf.compat.v1.Session(config=config)
 
     # Data loading
     data = DataLoader(config_args.batch_size, config_args.shuffle)
