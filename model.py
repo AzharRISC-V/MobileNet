@@ -1,4 +1,6 @@
 import tensorflow as tf
+
+tf.compat.v1.disable_v2_behavior()
 from layers import depthwise_separable_conv2d, conv2d, avg_pool_2d, dense, flatten, dropout
 import os
 from utils import load_obj, save_obj
@@ -34,16 +36,16 @@ class MobileNet:
         self.__build()
 
     def __init_input(self):
-        with tf.variable_scope('input'):
+        with tf.compat.v1.variable_scope('input'):
             # Input images
-            self.X = tf.placeholder(tf.float32,
-                                    [self.args.batch_size, self.args.img_height, self.args.img_width,
-                                     self.args.num_channels])
+            self.X = tf.compat.v1.placeholder(tf.float32,
+                                              [self.args.batch_size, self.args.img_height, self.args.img_width,
+                                               self.args.num_channels])
             # Classification supervision, it's an argmax. Feel free to change it to one-hot,
             # but don't forget to change the loss from sparse as well
-            self.y = tf.placeholder(tf.int32, [self.args.batch_size])
+            self.y = tf.compat.v1.placeholder(tf.int32, [self.args.batch_size])
             # is_training is for batch normalization and dropout, if they exist
-            self.is_training = tf.placeholder(tf.bool)
+            self.is_training = tf.compat.v1.placeholder(tf.bool)
 
     def __init_mean(self):
         # Preparing the mean image.
@@ -51,7 +53,7 @@ class MobileNet:
         img_mean[:, :, :, 0] *= 103.939
         img_mean[:, :, :, 1] *= 116.779
         img_mean[:, :, :, 2] *= 123.68
-        self.mean_img = tf.constant(img_mean, dtype=tf.float32)
+        self.mean_img = tf.compat.v1.constant(img_mean, dtype=tf.float32)
 
     def __build(self):
         self.__init_global_epoch()
@@ -62,9 +64,9 @@ class MobileNet:
         self.__init_output()
 
     def __init_network(self):
-        with tf.variable_scope('mobilenet_encoder'):
+        with tf.compat.v1.variable_scope('mobilenet_encoder'):
             # Preprocessing as done in the paper
-            with tf.name_scope('pre_processing'):
+            with tf.compat.v1.name_scope('pre_processing'):
                 preprocessed_input = (self.X - self.mean_img) / 255.0
 
             # Model is here!
@@ -225,7 +227,6 @@ class MobileNet:
                                          bias=self.args.bias))
             self.__add_to_nodes([avg_pool, dropped, self.logits])
 
-
     def __init_output(self):
         with tf.variable_scope('output'):
             self.regularization_loss = tf.reduce_sum(tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES))
@@ -274,9 +275,9 @@ class MobileNet:
         Create a global epoch tensor to totally save the process of the training
         :return:
         """
-        with tf.variable_scope('global_epoch'):
-            self.global_epoch_tensor = tf.Variable(-1, trainable=False, name='global_epoch')
-            self.global_epoch_input = tf.placeholder('int32', None, name='global_epoch_input')
+        with tf.compat.v1.variable_scope('global_epoch'):
+            self.global_epoch_tensor = tf.compat.v1.Variable(-1, trainable=False, name='global_epoch')
+            self.global_epoch_input = tf.compat.v1.placeholder('int32', None, name='global_epoch_input')
             self.global_epoch_assign_op = self.global_epoch_tensor.assign(self.global_epoch_input)
 
     def __init_global_step(self):
@@ -284,7 +285,7 @@ class MobileNet:
         Create a global step variable to be a reference to the number of iterations
         :return:
         """
-        with tf.variable_scope('global_step'):
-            self.global_step_tensor = tf.Variable(0, trainable=False, name='global_step')
-            self.global_step_input = tf.placeholder('int32', None, name='global_step_input')
+        with tf.compat.v1.variable_scope('global_step'):
+            self.global_step_tensor = tf.compat.v1.Variable(0, trainable=False, name='global_step')
+            self.global_step_input = tf.compat.v1.placeholder('int32', None, name='global_step_input')
             self.global_step_assign_op = self.global_step_tensor.assign(self.global_step_input)

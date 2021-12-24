@@ -5,6 +5,10 @@ from data_loader import DataLoader
 from summarizer import Summarizer
 import tensorflow as tf
 
+tf.compat.v1.disable_v2_behavior()
+
+
+# Tensorflow version: 2.7.0
 
 def main():
     # Parse the JSON arguments
